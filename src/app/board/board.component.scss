@@ -1,0 +1,120 @@
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+td {
+  margin: 0;
+  border-collapse: collapse;
+  border: 4px black solid;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 0.2vh 0.2vh #101014;
+  color: white;
+  background-color: #151e8c;
+}
+
+td.category {
+  color: #aaaaaa;
+  font-size: 0.9vw;
+  height: 9vh;
+}
+
+td.clue {
+  color: #cf9f3e;
+  font-size: 3vw;
+  height: 16vh;
+  padding: 0;
+}
+
+td.clue div {
+  height: 1em;
+}
+
+.right {
+  color: #00ff00;
+}
+
+.wrong {
+  color: #ff0000;
+}
+
+.passed {
+  color: #8a8fc6;
+}
+
+.lucky {
+  font-size: 70%;
+}
+
+.screen {
+  background-color: #151e8c;
+  border-radius: 4px;
+  height: 27vh;
+  width: 36vh;
+}
+
+p-dialog {
+  .responses {
+    .p-button {
+      font-size: 400%;
+      margin: 4px 0;
+    }
+  }
+
+  .clue {
+    .p-button {
+      width: 40%;
+      margin: 0 auto;
+    }
+  }
+
+  .wrapper {
+    display: flex;
+    flex-direction: row;
+  }
+
+  h1 {
+    margin: 0 auto;
+  }
+
+  .screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 0 auto;
+    background-color: #151e8c;
+    border-radius: 4px;
+    height: 27vh;
+    width: 36vh;
+
+    .dd {
+      text-transform: uppercase;
+      font-size: 3vh;
+      color: red;
+      font-weight: bold;
+    }
+
+    .value {
+      font-size: 5vh;
+      color: white;
+      font-weight: bold;
+    }
+
+    div {
+      margin: 0 auto;
+    }
+  }
+
+  .column {
+    margin: 0 4px;
+    padding: 0 4px;
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    flex-direction: column;
+    width: 50%;
+    flex: 1 0 0;
+  }
+}

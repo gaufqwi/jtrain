@@ -1,0 +1,39 @@
+<table class="board">
+    <tr class="header">
+        <td class="category" *ngFor="let category of game.getCategories()">{{category}}</td>
+    </tr>
+    <tr *ngFor="let row of [0,1,2,3,4]">
+        <td class="clue" *ngFor="let category of [0,1,2,3,4,5]" (click)="openClue(category, row)">
+            <ng-container [ngSwitch]="game.getClue(category, row).status">
+                <ng-container *ngSwitchCase="'unseen'"><div class="value">${{game.getClue(category, row).value}}</div></ng-container>
+                <ng-container *ngSwitchCase="'passed'"><div class="passed">•</div></ng-container>
+                <ng-container *ngSwitchCase="'wrong'"><div class="wrong">✘</div></ng-container>
+                <ng-container *ngSwitchCase="'right'"><div class="right">✓</div></ng-container>
+<!--                <ng-container *ngSwitchCase="'lucky'"><div class="lucky">🍀</div></ng-container>-->
+            </ng-container>
+        </td>
+    </tr>
+</table>
+<p-dialog header="&nbsp;" [(visible)]="targetClue" modal="true" [style]="{width: '50vw'}">
+    <div class="wrapper">
+        <div class="column responses">
+            <button pButton type="button" class="p-button-success p-button-rounded" label="Right" (click)="markClue('right')"></button>
+            <button pButton type="button" class="p-button-info p-button-rounded" label="Pass"(click)="markClue('passed')"></button>
+            <button pButton type="button" class="p-button-danger p-button-rounded" label="Wrong"(click)="markClue('wrong')"></button>
+        </div>
+        <div class="column clue">
+            <h1>{{this.targetClue?.category.title}}</h1>
+            <div class="screen">
+                <div class="dd" *ngIf="targetClue?.dd">Daily Double</div>
+                <div class="value">${{this.targetClue?.value}}</div>
+                <ng-container [ngSwitch]="targetClue?.status">
+                    <div *ngSwitchCase="'passed'" class="passed">•</div>
+                    <div *ngSwitchCase="'wrong'" class="wrong">✘</div>
+                    <div *ngSwitchCase="'right'" class="right">✓</div>
+<!--                    <div *ngSwitchCase="'lucky'" class="lucky">🍀</div>-->
+                </ng-container>
+            </div>
+            <button pButton type="button" class="p-button-primary p-button-text" label="Reset Clue"(click)="markClue('unseen')"></button>
+        </div>
+    </div>
+</p-dialog>

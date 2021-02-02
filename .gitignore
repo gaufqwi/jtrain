@@ -1,5 +1,9 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# Temp js artifacts
+/src/app/jarchive/*.js
+/src/app/jarchive/test*
+
 # compiled output
 /dist
 /tmp
