@@ -1,12 +1,27 @@
 <div class="container">
-    <j-board [game]="game"></j-board>
+    <j-board [game]="game" *ngIf="boardView"></j-board>
+    <j-review [summary]="game.getSummary()" [log]="game.log" *ngIf="!boardView"></j-review>
     <div class="controls">
-        <h3>Controls</h3>
-        <div class="score">Score: {{game.score}}</div>
-        <div class="score">Questions Answered: {{game.log.length}}</div>
-        <div class="date">
-            <p-calendar [disabledDays]="[0,6]" dateFormat="yy-mm-dd" [(ngModel)]="date"></p-calendar>
-            <p-button (click)="getGame()">Get Game</p-button>
+        <div class="section scoreboard">
+            <span class="label">Score</span>
+
+            <span class="score" [ngClass]="{negative: game.score < 0}">{{game.score |currency:'USD':'symbol':'1.0'}}</span>
+        </div>
+        <div class="section newgame">
+            <div>
+                <p-calendar [disabledDays]="[0,6]" dateFormat="yy-mm-dd" [(ngModel)]="date" [inputStyle]="{width: '7em'}"></p-calendar>
+                <button pButton type="button" (click)="getGame()" class="p-button-success" label="Fetch From JArchive"></button>
+            </div>
+            <button pButton type="button" label="Blank Game"class="p-button-primary"></button>
+        </div>
+        <div class="section roundselect">
+            <p-selectButton [options]="game.getRoundIterable()" optionLabel="label" optionValue="label"
+                            [(ngModel)]="roundLabel" (onChange)="game.setRound($event.value)"></p-selectButton>
+        </div>
+        <div class="section buttons">
+            <button pButton type="button" class="p-button-info p-button-rounded"
+                    [label]="boardView ? 'Review Game' : 'View Board'" (click)="boardView = !boardView"></button>
+            <button pButton type="button" class="p-button-warning p-button-rounded" label="Upload Results"></button>
         </div>
     </div>
 </div>

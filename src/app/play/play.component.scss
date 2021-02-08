@@ -1,19 +1,78 @@
 .container {
+  margin: 4px;
   display: flex;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  min-height: 89vh;
 }
 
 .controls {
   display: flex;
   flex-flow: column nowrap;
-  justify-content: space-between;
+  justify-content: space-around;
   border: 0;
-  margin: 0;
+  padding: 8px;
+  margin: 0 4px;
   width: 30%;
   background-color: lightgray;
+
+  .negative {
+    color: red;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    .p-button {
+      width: 80%;
+      margin: 4px auto;
+      font-size: 200%;
+    }
+  }
+
+  //.newgame {
+  //  .p-calendar {
+  //    width: 12em;
+  //  }
+  //}
+
+  .roundselect {
+    text-align: center;
+  }
+
+  .scoreboard {
+    text-align: center;
+    span {
+      display: block;
+      margin: 2px auto;
+    }
+    .label {
+      font-size: 5vh;
+      font-weight: bold;
+    }
+    .score {
+      font-size: 9vh;
+    }
+  }
+
+  .section {
+    margin: 2px 4px;
+  }
+
+  .newgame {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .p-button {
+      margin: 0 4px;
+    }
+
+  }
 }
 
-j-board {
+j-board, j-review {
   border: 0;
   margin: 0;
   width: 70%;

@@ -11,6 +11,8 @@ export class PlayComponent implements OnInit {
   //gamestate: GameState;
   game: Game;
   date: Date = new Date();
+  roundLabel: string = 'Jeopardy';
+  boardView: boolean = true;
 
   constructor(private jarchive: JArchiveService) { }
 

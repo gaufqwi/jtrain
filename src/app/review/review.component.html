@@ -1,0 +1,73 @@
+<div class="review">
+    <p-table [value]="[0]" class="summary">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>&nbsp;</th>
+                <th>Jeopardy</th>
+                <th>Double Jeopardy</th>
+                <th>Total</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body">
+            <tr>
+                <td class="rowlabel">Coryat</td>
+                <td>{{summary.score['Jeopardy'] | currency:'USD':'symbol':'1.0'}}</td>
+                <td>{{summary.score['Double Jeopardy'] | currency:'USD':'symbol':'1.0'}}</td>
+                <td>{{summary.score['Jeopardy'] + summary.score['Double Jeopardy'] | currency:'USD':'symbol':'1.0'}}</td>
+            </tr>
+            <tr>
+                <td class="rowlabel">Right</td>
+                <td>{{summary.clueRightCount['Jeopardy']}}</td>
+                <td>{{summary.clueRightCount['Double Jeopardy']}}</td>
+                <td>{{summary.clueRightCount['Jeopardy'] + summary.clueRightCount['Double Jeopardy']}}</td>
+            </tr>
+            <tr>
+                <td class="rowlabel">Wrong</td>
+                <td>{{summary.clueWrongCount['Jeopardy']}}</td>
+                <td>{{summary.clueWrongCount['Double Jeopardy']}}</td>
+                <td>{{summary.clueWrongCount['Jeopardy'] + summary.clueWrongCount['Double Jeopardy']}}</td>
+            </tr>
+            <tr>
+                <td class="rowlabel">Daily Doubles</td>
+                <td>{{summary.ddRight['Jeopardy']}}/{{summary.ddTotal['Jeopardy']}}</td>
+                <td>{{summary.ddRight['Double Jeopardy']}}/{{summary.ddTotal['Double Jeopardy']}}</td>
+                <td>{{summary.ddRight['Jeopardy'] + summary.ddRight['Double Jeopardy']}}/{{summary.ddTotal['Jeopardy'] + summary.ddTotal['Double Jeopardy']}}</td>
+            </tr>
+            <tr>
+                <td class="rowlabel">Lach Trash</td>
+                <td><span [tooltipDisabled]="summary.lt['Jeopardy'].length<1" tooltipPosition="top" [pTooltip]="summary.lt['Jeopardy'].join(', ')">
+                    {{summary.ltTotal['Jeopardy'] | currency:'USD':'symbol':'1.0'}}
+                </span></td>
+                <td><span [tooltipDisabled]="summary.lt['Double Jeopardy'].length<1" tooltipPosition="top" [pTooltip]="summary.lt['Double Jeopardy'].join(', ')">
+                    {{summary.ltTotal['Double Jeopardy'] | currency:'USD':'symbol':'1.0'}}
+                </span></td>
+                <td>{{summary.ltTotal['Jeopardy'] + summary.ltTotal['Double Jeopardy'] | currency:'USD':'symbol':'1.0'}}</td>
+            </tr>
+            <tr>
+                <td class="rowlabel">Bottom Row Clues</td>
+                <td><span [tooltipDisabled]="summary.bottomRowClues['Jeopardy'].length<1" tooltipPosition="top" [pTooltip]="summary.bottomRowClues['Jeopardy'].join(', ')">
+                    {{summary.bottomRowClues['Jeopardy'].length}}
+                </span></td>
+                <td><span [tooltipDisabled]="summary.bottomRowClues['Double Jeopardy'].length<1" tooltipPosition="top" [pTooltip]="summary.bottomRowClues['Double Jeopardy'].join(', ')">
+                    {{summary.bottomRowClues['Double Jeopardy'].length}}
+                </span></td>
+                <td>{{summary.bottomRowClues['Jeopardy'].length + summary.bottomRowClues['Double Jeopardy'].length}}</td>
+            </tr>
+            <tr>
+                <td class="rowlabel">Category Runs</td>
+                <td><span [tooltipDisabled]="summary.runs['Jeopardy'].length<1" tooltipPosition="top" [pTooltip]="summary.runs['Jeopardy'].join(', ')">
+                    {{summary.runs['Jeopardy'].length}}
+                </span></td>
+                <td><span [tooltipDisabled]="summary.runs['Double Jeopardy'].length<1" tooltipPosition="top" [pTooltip]="summary.runs['Double Jeopardy'].join(', ')">
+                    {{summary.runs['Double Jeopardy'].length}}
+                </span></td>
+                <td>{{summary.runs['Jeopardy'].length + summary.runs['Double Jeopardy'].length}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+<!--    <div style="background-color: white; color: green;" class="coryats"><h1>Some damn thing</h1></div>-->
+    <p-panel class="coryats" header="Coryat Comparison">
+        <p-chart type="bar" [options]="chartConfig" height="22rem" [data]="chartData"></p-chart>
+    </p-panel>
+</div>
+

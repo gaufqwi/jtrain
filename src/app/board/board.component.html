@@ -14,7 +14,7 @@
         </td>
     </tr>
 </table>
-<p-dialog header="&nbsp;" [(visible)]="targetClue" modal="true" [style]="{width: '50vw'}">
+<p-dialog [closable]="false" [(visible)]="targetClue" modal="true" [style]="{width: '70vw'}">
     <div class="wrapper">
         <div class="column responses">
             <button pButton type="button" class="p-button-success p-button-rounded" label="Right" (click)="markClue('right')"></button>
@@ -27,13 +27,14 @@
                 <div class="dd" *ngIf="targetClue?.dd">Daily Double</div>
                 <div class="value">${{this.targetClue?.value}}</div>
                 <ng-container [ngSwitch]="targetClue?.status">
-                    <div *ngSwitchCase="'passed'" class="passed">•</div>
-                    <div *ngSwitchCase="'wrong'" class="wrong">✘</div>
-                    <div *ngSwitchCase="'right'" class="right">✓</div>
+                    <div *ngSwitchCase="'passed'" class="status passed">•</div>
+                    <div *ngSwitchCase="'wrong'" class="status wrong">✘</div>
+                    <div *ngSwitchCase="'right'" class="status right">✓</div>
 <!--                    <div *ngSwitchCase="'lucky'" class="lucky">🍀</div>-->
                 </ng-container>
             </div>
-            <button pButton type="button" class="p-button-primary p-button-text" label="Reset Clue"(click)="markClue('unseen')"></button>
+            <button pButton type="button" class="p-button-primary p-button-text" label="Reset Clue" (click)="markClue('unseen')"></button>
+            <button pButton type="button" class="p-button-primary p-button-round" label="Cancel" (click)="targetClue=null"></button>
         </div>
     </div>
 </p-dialog>

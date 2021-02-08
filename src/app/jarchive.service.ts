@@ -10,13 +10,13 @@ const logGame = game => {console.log(game); return game};
   providedIn: 'root'
 })
 export class JArchiveService {
-  private server = 'http://localhost';
+  private server = '';
   private port = 4200;
 
   constructor(private http: HttpClient) { }
 
   testAPI () {
-    this.http.get(`${this.server}:${this.port}/api/test`).subscribe(data => console.log('Response', data));
+    this.http.get(`/api/test`).subscribe(data => console.log('Response', data));
   }
 
   getNewGame (): Game {
@@ -24,11 +24,11 @@ export class JArchiveService {
   }
 
   getGameById (jid: number): Observable<Game> {
-      return this.http.get(`${this.server}:${this.port}/api/jbyid/${jid}`).pipe(map(gameFilter));
+      return this.http.get(`/api/jbyid/${jid}`).pipe(map(gameFilter));
   }
 
   getGameByDate (date: string): Observable<Game> {
-      return this.http.get(`${this.server}:${this.port}/api/jbydate/${date}`).pipe(map(gameFilter));
+      return this.http.get(`/api/jbydate/${date}`).pipe(map(gameFilter));
   }
 }
 
@@ -131,6 +131,11 @@ interface GameInterface {
     rounds: object;
 }
 
+interface LogItem {
+    clue: Clue;
+    keep: boolean;
+}
+
 export class Game {
     public airdate: string;
     public coryats: object = {};
@@ -138,7 +143,7 @@ export class Game {
     public score: number = 0;
 
     private round: Round;
-    public log: object[] = [];
+    public log: LogItem[] = [];
 
     constructor (game: GameInterface = null) {
         if (game) {
@@ -165,7 +170,6 @@ export class Game {
     getCategories (): string[] {
         const categories = [];
         for (const category of this.round.categories) {
-            //console.log('C', category);
             categories.push(category.title);
         }
         return categories;
@@ -192,18 +196,17 @@ export class Game {
     }
 
     logClue (clue: Clue) {
-        const now = new Date();
-        this.log.push({clue, timestamp: [now.getHours(), now.getMinutes(), now.getSeconds()]});
+        this.log.push({clue, keep: (clue.status === 'wrong' || clue.status === 'passed')});
     }
 
     unlogClue (clue: Clue) {
-        const index = this.log.findIndex((item: any) => item.clue === clue);
+        const index = this.log.findIndex((item: LogItem) => item.clue === clue);
         if (index !== -1) {
             this.log.splice(index, 1);
         }
     }
 
-    recalcScore() {
+    recalcScore () {
         this.score = 0;
         for (const key in this.rounds) {
             const round = this.rounds[key];
@@ -219,4 +222,146 @@ export class Game {
         }
     }
 
+    getRoundIterable (): Round[] {
+        const rounds = [];
+        for (const key in this.rounds) {
+            rounds.push({label: key, round: this.rounds[key]});
+        }
+        return rounds;
+    }
+
+    // getFormattedScore (): string {
+    //     return `${this.score < 0 ? '-$' : '$'}${Math.abs(this.score)}`
+    // }
+
+    getSummary (): object {
+        const score = {'Jeopardy': 0, 'Double Jeopardy': 0};
+        const clueRightCount = {'Jeopardy': 0, 'Double Jeopardy': 0};
+        const clueWrongCount = {'Jeopardy': 0, 'Double Jeopardy': 0};
+        const categoryCounts = {'Jeopardy': {}, 'Double Jeopardy': {}};
+        const bottomRowClues = {'Jeopardy': [], 'Double Jeopardy': []};
+        const runs = {'Jeopardy': [], 'Double Jeopardy': []};
+        //const antiRuns = {'Jeopardy': [], 'Double Jeopardy': []};
+        const lt = {'Jeopardy': [], 'Double Jeopardy': []};
+        const ltTotal = {'Jeopardy': 0, 'Double Jeopardy': 0};
+        const ddRight = {'Jeopardy': 0, 'Double Jeopardy': 0};
+        const ddTotal = {'Jeopardy': 0, 'Double Jeopardy': 0};
+        for (const round of ['Jeopardy', 'Double Jeopardy']) {
+            for (const category of this.rounds[round].categories) {
+                categoryCounts[round][category.title] = 0;
+            }
+        }
+        for (const item of this.log) {
+            const clue = item.clue;
+            const category = clue.category.title;
+            const round = clue.category.round.label;
+            if (clue.status === 'right') {
+                clueRightCount[round] += 1;
+                score[round] += clue.value;
+                categoryCounts[round][category] += 1;
+                if (clue.dd) {
+                    ddRight[round] += 1;
+                }
+                if (clue.ts) {
+                    lt[round].push(clue.correct);
+                    ltTotal[round] += clue.value;
+                }
+                if ((round === 'Jeopardy' && clue.value === 1000) ||
+                    (round === 'Double Jeopardy' && clue.value === 2000)) {
+                    bottomRowClues[round].push(category);
+                }
+            } else if (clue.status === 'wrong') {
+                clueWrongCount[round] += 1;
+                if (!clue.dd) {
+                    score[round] -= clue.value;
+                }
+            }
+            if (clue.dd) {
+                ddTotal[round] += 1;
+            }
+        }
+        for (const round of ['Jeopardy', 'Double Jeopardy']) {
+            for (const category in categoryCounts[round]) {
+                if (categoryCounts[round][category] === 5) {
+                    runs[round].push(category);
+                }
+                // else if (categoryCounts[round][category] === 0) {
+                //     antiRuns[round].push(category);
+                // }
+            }
+        }
+        //return sample;
+        return {score, clueRightCount, clueWrongCount, runs, bottomRowClues,
+             lt, ltTotal, ddRight, ddTotal, coryats: this.coryats};
+    }
 }
+
+let sample = {
+    "score": {
+        "Jeopardy": 8600,
+        "Double Jeopardy": 21200
+    },
+    "bottomRowClues": {
+        "Jeopardy": [
+            "THE 20th CENTURY", "SOME OTHER CLUE", "18TH CENTURY OPERA", "MATH"
+        ],
+        "Double Jeopardy": [
+            //"THE 1971 EMMY AWARDS", "FAKE NEWS", "RHYME TIME"
+        ]
+    },
+    "clueRightCount": {
+        "Jeopardy": 18,
+        "Double Jeopardy": 20
+    },
+    "clueWrongCount": {
+        "Jeopardy": 3,
+        "Double Jeopardy": 4
+    },
+    "runs": {
+        "Jeopardy": [
+            "THE 20th CENTURY"
+        ],
+        "Double Jeopardy": [
+            "THE 1971 EMMY AWARDS"
+        ]
+    },
+    "antiRuns": {
+        "Jeopardy": [
+            "NATIONAL GEOGRAPHIC AMERICA THE BEAUTIFUL"
+        ],
+        "Double Jeopardy": []
+    },
+    "lt": {
+        "Jeopardy": [
+            "Russia",
+            "Animal Crossing",
+            "dinkum"
+        ],
+        "Double Jeopardy": [
+            "Valerie Harper",
+            "the tibia",
+            "The Snow Queen",
+            "Norway",
+            "homonym",
+            "a Cyclops"
+        ]
+    },
+    "ltTotal": {
+        "Jeopardy": 1800,
+        "Double Jeopardy": 10400
+    },
+    "ddRight": {
+        "Jeopardy": 1,
+        "Double Jeopardy": 1
+    },
+    "ddTotal": {
+        "Jeopardy": 1,
+        "Double Jeopardy": 2
+    },
+    "coryats": {
+        "combined": 25000,
+        "Peter": 12200,
+        "Paul": 9800,
+        "Mary": 3000
+    }
+};

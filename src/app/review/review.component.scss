@@ -1,0 +1,88 @@
+.review {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+
+    //.summary tr {
+    //    font-size: 80%;
+    //}
+
+    //::ng-deep canvas {
+    //    background-color: white;
+    //}
+
+    ::ng-deep .chartjs-size-monitor {
+        //height: 100%;
+    }
+
+    ::ng-deep .summary .p-datatable {
+        flex: 55% 0 0;
+        margin: 4px 2px;
+    }
+
+    .coryats {
+        flex: 45% 0 0;
+        margin: 4px 2px;
+
+        ::ng-deep .p-panel {
+            padding: 0;
+            height: 100%;
+        }
+        ::ng-deep .p-toggleable-content {
+            padding: 0;
+            height: 100%;
+        }
+        ::ng-deep .p-panel-content {
+            padding: 0;
+            height: calc(100% - 50px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+    }
+
+    .summary td, .summary th {
+        text-align: center;
+    }
+
+    .summary td.round-label {
+        font-size: 125%;
+        font-weight: bold;
+    }
+
+    .summary td:first-child {
+        text-align: right;
+    }
+    //.summary {
+    //    display: flex;
+    //    flex-direction: column;
+    //    justify-content: space-between;
+    //    .section {
+    //        background-color: white;
+    //        color: black;
+    //        flex: 0 1;
+    //        margin: 4px;
+    //
+    //        span::after {
+    //            content: " ";
+    //        }
+    //
+    //        .label {
+    //            font-weight: bold;
+    //        }
+    //
+    //        .score {
+    //            color: forestgreen;
+    //        }
+    //
+    //        h1 {
+    //            font-size: 125%;
+    //        }
+    //    }
+    //}
+}
+
+.p-chip-text {
+    font-size: 80%;
+}
