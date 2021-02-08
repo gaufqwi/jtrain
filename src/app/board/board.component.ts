@@ -21,12 +21,13 @@ export class BoardComponent implements OnInit {
   }
 
   markClue (status: string) {
+      const oldstatus = this.targetClue.status;
+      this.targetClue.status = status;
       if (status === 'unseen') {
           this.game.unlogClue(this.targetClue);
-      } else if (this.targetClue.status === 'unseen') {
+      } else if (oldstatus === 'unseen') {
         this.game.logClue(this.targetClue);
       }
-      this.targetClue.status = status;
       this.game.recalcScore();
       this.targetClue = null;
   }

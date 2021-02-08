@@ -1,20 +1,53 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    height: 89vh;
+}
+
+
+.questions {
+    flex: 1 0 0;
+
+    td, th {
+        text-align: center;
+        padding: 8px;
+        font-size: 90%;
+    }
+
+    th.round, td.round {
+        width: 6em;
+    }
+
+    th.category, td.category {
+        width: 16em;
+    }
+
+    th.clue, td.clue {
+        width: 36em;
+    }
+
+    td.clue {
+        text-align: left;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    th.save, td.save {
+        width: 6em;
+
+        ::ng-deep .p-checkbox {
+            margin: 0 auto;
+        }
+    }
+}
+
 .review {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: stretch;
-
-    //.summary tr {
-    //    font-size: 80%;
-    //}
-
-    //::ng-deep canvas {
-    //    background-color: white;
-    //}
-
-    ::ng-deep .chartjs-size-monitor {
-        //height: 100%;
-    }
 
     ::ng-deep .summary .p-datatable {
         flex: 55% 0 0;
@@ -54,35 +87,5 @@
     .summary td:first-child {
         text-align: right;
     }
-    //.summary {
-    //    display: flex;
-    //    flex-direction: column;
-    //    justify-content: space-between;
-    //    .section {
-    //        background-color: white;
-    //        color: black;
-    //        flex: 0 1;
-    //        margin: 4px;
-    //
-    //        span::after {
-    //            content: " ";
-    //        }
-    //
-    //        .label {
-    //            font-weight: bold;
-    //        }
-    //
-    //        .score {
-    //            color: forestgreen;
-    //        }
-    //
-    //        h1 {
-    //            font-size: 125%;
-    //        }
-    //    }
-    //}
 }
 
-.p-chip-text {
-    font-size: 80%;
-}

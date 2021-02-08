@@ -133,7 +133,7 @@ interface GameInterface {
 
 interface LogItem {
     clue: Clue;
-    keep: boolean;
+    save: boolean;
 }
 
 export class Game {
@@ -196,7 +196,7 @@ export class Game {
     }
 
     logClue (clue: Clue) {
-        this.log.push({clue, keep: (clue.status === 'wrong' || clue.status === 'passed')});
+        this.log.push({clue, save: (clue.status === 'wrong' || clue.status === 'passed')});
     }
 
     unlogClue (clue: Clue) {

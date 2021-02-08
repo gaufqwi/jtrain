@@ -8,6 +8,10 @@ import {Component, Input, OnInit} from '@angular/core';
 export class ReviewComponent implements OnInit {
   @Input() summary: any;
   @Input() log: object[];
+  abbreviations = {
+      'Jeopardy': 'J',
+      'Double Jeopardy': 'DJ'
+  };
   chartData: object;
     chartConfig = {
         legend: {display: false},
@@ -32,6 +36,7 @@ export class ReviewComponent implements OnInit {
 
   ngOnInit(): void {
       this.chartData = this.makeChartData();
+      console.log(this.log);
   }
 
   makeChartData (): object {
