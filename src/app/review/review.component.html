@@ -13,7 +13,9 @@
                 <td class="rowlabel">Coryat</td>
                 <td>{{summary.score['Jeopardy'] | currency:'USD':'symbol':'1.0'}}</td>
                 <td>{{summary.score['Double Jeopardy'] | currency:'USD':'symbol':'1.0'}}</td>
-                <td>{{summary.score['Jeopardy'] + summary.score['Double Jeopardy'] | currency:'USD':'symbol':'1.0'}}</td>
+                <td>{{summary.score['Jeopardy'] + summary.score['Double Jeopardy'] | currency:'USD':'symbol':'1.0'}}
+                    <span class="star" *ngIf="summary.fjCorrect">⭐</span>
+                </td>
             </tr>
             <tr>
                 <td class="rowlabel">Right</td>

@@ -23,6 +23,10 @@ export class JArchiveService {
       return new Game();
   }
 
+  postGameData (date, stats, clues): Observable<any> {
+      return this.http.post('/api/gamedata', {date, stats, clues});
+  }
+
   getGameById (jid: number): Observable<Game> {
       return this.http.get(`/api/jbyid/${jid}`).pipe(map(gameFilter));
   }
@@ -76,9 +80,14 @@ export class Category {
 
     constructor (position: (number|CategoryInterface), increment: number = null) {
         if (typeof position === 'number') {
-            this.title = `Category ${position}`;
-            for (let i = 1; i <= 5; i++) {
-                this.clues.push(new Clue(i * increment));
+            if (position) {
+                this.title = `Category ${position}`;
+                for (let i = 1; i <= 5; i++) {
+                    this.clues.push(new Clue(i * increment));
+                }
+            } else {
+                this.title = 'Final Jeopardy';
+                this.clues.push(new Clue(0));
             }
         } else {
             //let category = position as CategoryInterface;
@@ -109,8 +118,12 @@ export class Round {
         if (typeof label === "string") {
             this.label = label;
             //const increment = (label === 'Jeopardy' ? 200 : 400);
-            for (let i = 1; i <= 6; i++) {
-                this.categories.push(new Category(i, increment));
+            if (increment) {
+                for (let i = 1; i <= 6; i++) {
+                    this.categories.push(new Category(i, increment));
+                }
+            } else {
+                this.categories.push(new Category(0, 0));
             }
         } else {
             //let round = label as RoundInterface;
@@ -147,24 +160,34 @@ export class Game {
 
     constructor (game: GameInterface = null) {
         if (game) {
-            for (const key in game.rounds) {
-                game.rounds[key] = new Round(game.rounds[key]);
+            for (const round of ['Jeopardy', 'Double Jeopardy', 'Final Jeopardy']) {
+                game.rounds[round] = new Round(game.rounds[round]);
             }
+            //console.log(game.rounds['Final Jeopardy']);
             Object.assign(this, game);
         } else {
             const now = new Date();
             this.airdate = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
             this.rounds['Jeopardy'] = new Round('Jeopardy', 200);
             this.rounds['Double Jeopardy'] = new Round('Double Jeopardy', 400);
+            this.rounds['Final Jeopardy'] = new Round('Final Jeopardy', 0);
         }
-        for (const key in this.rounds) {
-            this.rounds[key].game = this;
+        for (const round of ['Jeopardy', 'Double Jeopardy']) {
+            this.rounds[round].game = this;
         }
         this.round = this.rounds['Jeopardy'];
     }
 
     setRound (label: string) {
         this.round = this.rounds[label];
+    }
+
+    isFJ (): boolean {
+        return (this.round.label === 'Final Jeopardy');
+    }
+
+    getFinalCategory (): string {
+        return this.rounds['Final Jeopardy'].categories[0].title;
     }
 
     getCategories (): string[] {
@@ -208,8 +231,8 @@ export class Game {
 
     recalcScore () {
         this.score = 0;
-        for (const key in this.rounds) {
-            const round = this.rounds[key];
+        for (const name of ['Jeopardy', 'Double Jeopardy']) {
+            const round = this.rounds[name];
             for (const category of round.categories) {
                 for (const clue of category.clues) {
                     if (clue.status === 'right') {
@@ -251,11 +274,14 @@ export class Game {
                 categoryCounts[round][category.title] = 0;
             }
         }
+        let fjCorrect = false;
         for (const item of this.log) {
             const clue = item.clue;
             const category = clue.category.title;
             const round = clue.category.round.label;
-            if (clue.status === 'right') {
+            if (round === 'Final Jeopardy') {
+                fjCorrect = (clue.status === 'right');
+            } else if (clue.status === 'right') {
                 clueRightCount[round] += 1;
                 score[round] += clue.value;
                 categoryCounts[round][category] += 1;
@@ -292,7 +318,7 @@ export class Game {
         }
         //return sample;
         return {score, clueRightCount, clueWrongCount, runs, bottomRowClues,
-             lt, ltTotal, ddRight, ddTotal, coryats: this.coryats};
+             lt, ltTotal, ddRight, ddTotal, fjCorrect, coryats: this.coryats};
     }
 }
 

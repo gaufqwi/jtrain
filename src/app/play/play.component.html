@@ -21,7 +21,8 @@
         <div class="section buttons">
             <button pButton type="button" class="p-button-info p-button-rounded"
                     [label]="boardView ? 'Review Game' : 'View Board'" (click)="boardView = !boardView"></button>
-            <button pButton type="button" class="p-button-warning p-button-rounded" label="Upload Results"></button>
+            <button pButton (click)="uploadGameData()"
+                    type="button" class="p-button-warning p-button-rounded" label="Upload Results"></button>
         </div>
     </div>
 </div>

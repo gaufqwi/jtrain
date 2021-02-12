@@ -1,4 +1,4 @@
-<table class="board">
+<table class="board" *ngIf="!game.isFJ()">
     <tr class="header">
         <td class="category" *ngFor="let category of game.getCategories()">{{category}}</td>
     </tr>
@@ -9,12 +9,21 @@
                 <ng-container *ngSwitchCase="'passed'"><div class="passed">•</div></ng-container>
                 <ng-container *ngSwitchCase="'wrong'"><div class="wrong">✘</div></ng-container>
                 <ng-container *ngSwitchCase="'right'"><div class="right">✓</div></ng-container>
-<!--                <ng-container *ngSwitchCase="'lucky'"><div class="lucky">🍀</div></ng-container>-->
             </ng-container>
         </td>
     </tr>
 </table>
-<p-dialog [closable]="false" [(visible)]="targetClue" modal="true" [style]="{width: '70vw'}">
+<div class="final" *ngIf="game.isFJ()">
+    <div class="screen">
+        <div class="dd">Final Jeopardy</div>
+        <div class="category">{{game.getFinalCategory()}}</div>
+    </div>
+    <div class="buttons">
+        <button pButton type="button" class="p-button-success p-button-rounded" label="Right" (click)="markFJClue('right')"></button>
+        <button pButton type="button" class="p-button-danger p-button-rounded" label="Wrong" (click)="markFJClue('wrong')"></button>
+    </div>
+</div>
+<p-dialog [closable]="false" [visible]="targetClue" modal="true" [style]="{width: '85vw'}">
     <div class="wrapper">
         <div class="column responses">
             <button pButton type="button" class="p-button-success p-button-rounded" label="Right" (click)="markClue('right')"></button>
@@ -22,10 +31,10 @@
             <button pButton type="button" class="p-button-danger p-button-rounded" label="Wrong"(click)="markClue('wrong')"></button>
         </div>
         <div class="column clue">
-            <h1>{{this.targetClue?.category.title}}</h1>
+            <h1>{{targetClue?.category.title}}</h1>
             <div class="screen">
                 <div class="dd" *ngIf="targetClue?.dd">Daily Double</div>
-                <div class="value">${{this.targetClue?.value}}</div>
+                <div class="value">${{targetClue?.value}}</div>
                 <ng-container [ngSwitch]="targetClue?.status">
                     <div *ngSwitchCase="'passed'" class="status passed">•</div>
                     <div *ngSwitchCase="'wrong'" class="status wrong">✘</div>

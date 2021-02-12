@@ -7,7 +7,9 @@
 
 
 .questions {
-    flex: 1 0 0;
+    flex-grow: 1;
+    overflow: hidden;
+    padding: 2px;
 
     td, th {
         text-align: center;
@@ -52,6 +54,12 @@
     ::ng-deep .summary .p-datatable {
         flex: 55% 0 0;
         margin: 4px 2px;
+    }
+
+    .star {
+        font-size: 80%;
+        position: relative;
+        top: -0.15em;
     }
 
     .coryats {

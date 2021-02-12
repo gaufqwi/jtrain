@@ -1,0 +1,12 @@
+CREATE TABLE clues (
+    date TEXT,
+    round TEXT,
+    category TEXT,
+    value INTEGER,
+    clue TEXT,
+    correct TEXT,
+    processed INTEGER DEFAULT 0
+);
+
+CREATE INDEX processed_index ON clues (processed);
+

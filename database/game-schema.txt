@@ -1,0 +1,19 @@
+CREATE TABLE games (
+    date TEXT PRIMARY KEY,
+    coryat_j INTEGER,
+    coryat_dj INTEGER,
+    coryat_combined INTEGER,
+    right_j INTEGER,
+    right_dj INTEGER,
+    wrong_j INTEGER,
+    wrong_dj INTEGER,
+    dd_j INTEGER,
+    dd_dj INTEGER,
+    lt_j INTEGER,
+    lt_dj INTEGER,
+    runs_j INTEGER,
+    runs_dj INTEGER,
+    bottom_j INTEGER,
+    bottom_dj INTEGER,
+    final INTEGER
+);

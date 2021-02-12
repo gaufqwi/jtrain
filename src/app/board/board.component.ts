@@ -20,6 +20,12 @@ export class BoardComponent implements OnInit {
       this.targetClue = this.game.getClue(category, row);
   }
 
+  markFJClue (status: string) {
+      const clue = this.game.rounds['Final Jeopardy'].categories[0].clues[0];
+      clue.status = status;
+      this.game.logClue(clue);
+  }
+
   markClue (status: string) {
       const oldstatus = this.targetClue.status;
       this.targetClue.status = status;

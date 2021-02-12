@@ -4,6 +4,9 @@
 /src/app/jarchive/*.js
 /src/app/jarchive/test*
 
+# Database
+/database/jeopardy.db
+
 # compiled output
 /dist
 /tmp

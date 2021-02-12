@@ -42,8 +42,38 @@ class JAPI {
         const coryats = this ._parseCoryats($);
         const round_query = $('.round');
         const rounds = {'Jeopardy': this._parseRound($, round_query[0], 'Jeopardy', 200),
-            'Double Jeopardy': this._parseRound($, round_query[1], 'Double Jeopardy', 400)};
+            'Double Jeopardy': this._parseRound($, round_query[1], 'Double Jeopardy', 400),
+            'Final Jeopardy': this._parseFinal($)
+        };
+        //console.log(JSON.stringify(rounds, null, 2)); //FIXME
         return {airdate, coryats, rounds};
+    }
+
+    _parseFinal ($) {
+        //const category = $('.final_round .category_name').text();
+        //const clue = $('#clue_FJ').text();
+        const onmouseover = $('.final_round div[onmouseover]').attr('onmouseover').trim().replace(/\\"/g, '"');
+        const $result = cheerio.load(onmouseover.match(_toggle_re)[1]);
+        //const correct = $result('.correct_response').text();
+        return {
+            label: 'Final Jeopardy',
+            categories: [{
+                title: $('.final_round .category_name').text(),
+                clues: [{
+                    value: 0,
+                    dd: false,
+                    ts: false,
+                    clue: $('#clue_FJ').text(),
+                    correct: $result('.correct_response').text(),
+                    media: []
+                }]
+            }]
+        }
+        // return {
+        //     category: $('.final_round .category_name').text(),
+        //     clue: $('#clue_FJ').text(),
+        //     correct: $result('.correct_response').text()
+        // };
     }
 
     _parseCoryats ($) {

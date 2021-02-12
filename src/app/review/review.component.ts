@@ -36,7 +36,6 @@ export class ReviewComponent implements OnInit {
 
   ngOnInit(): void {
       this.chartData = this.makeChartData();
-      console.log(this.log);
   }
 
   makeChartData (): object {
@@ -59,7 +58,6 @@ export class ReviewComponent implements OnInit {
               data.datasets[0].backgroundColor.push('#4287f5');
           }
       }
-      console.log(data);
       return data;
   }
 
