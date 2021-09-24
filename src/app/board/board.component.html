@@ -4,7 +4,7 @@
     </tr>
     <tr *ngFor="let row of [0,1,2,3,4]">
         <td class="clue" *ngFor="let category of [0,1,2,3,4,5]" (click)="openClue(category, row)">
-            <ng-container [ngSwitch]="game.getClue(category, row).status">
+            <ng-container [ngSwitch]="game.getClue(category, row) ? game.getClue(category, row).status : 'passed'">
                 <ng-container *ngSwitchCase="'unseen'"><div class="value">${{game.getClue(category, row).value}}</div></ng-container>
                 <ng-container *ngSwitchCase="'passed'"><div class="passed">•</div></ng-container>
                 <ng-container *ngSwitchCase="'wrong'"><div class="wrong">✘</div></ng-container>

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
+import {map, catchError, retry} from "rxjs/operators";
+import {throwError} from "rxjs";
 
 const gameFilter = game => new Game(game as GameInterface);
 const logGame = game => {console.log(game); return game};
@@ -15,6 +16,19 @@ export class JArchiveService {
 
   constructor(private http: HttpClient) { }
 
+    handleError (error: HttpErrorResponse) {
+        if (error.error instanceof ErrorEvent) {
+            // A client-side or network error occurred. Handle it accordingly.
+            console.error('An error occurred:', error.error.message);
+        } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong.
+            console.error(`Backend returned code ${error.status}, body was: ${error.error}`);
+        }
+        // Return an observable with a user-facing error message.
+        return throwError('Error with network request');
+    }
+
   testAPI () {
     this.http.get(`/api/test`).subscribe(data => console.log('Response', data));
   }
@@ -24,15 +38,26 @@ export class JArchiveService {
   }
 
   postGameData (date, stats, clues): Observable<any> {
-      return this.http.post('/api/gamedata', {date, stats, clues});
+      return this.http.post('/api/gamedata', {date, stats, clues}).pipe(
+          catchError(this.handleError)
+      )
   }
 
   getGameById (jid: number): Observable<Game> {
-      return this.http.get(`/api/jbyid/${jid}`).pipe(map(gameFilter));
+      return this.http.get(`/api/jbyid/${jid}`).pipe(
+          retry(3),
+          map(gameFilter),
+          catchError(this.handleError)
+      );
   }
 
   getGameByDate (date: string): Observable<Game> {
-      return this.http.get(`/api/jbydate/${date}`).pipe(map(gameFilter));
+      return this.http.get(`/api/jbydate/${date}`).pipe(
+          //retry(3),
+          //map(logGame),
+          map(gameFilter),
+          //catchError(this.handleError)
+      );
   }
 }
 
@@ -99,7 +124,9 @@ export class Category {
             Object.assign(this, position);
         }
         for (const clue of this.clues) {
-            clue.category = this;
+            if (clue) {
+                clue.category = this;
+            }
         }
     }
 }
@@ -235,6 +262,9 @@ export class Game {
             const round = this.rounds[name];
             for (const category of round.categories) {
                 for (const clue of category.clues) {
+                    if (!clue) {
+                        continue;
+                    }
                     if (clue.status === 'right') {
                         this.score += clue.value;
                     } else if (clue.status === 'wrong' && !clue.dd) {

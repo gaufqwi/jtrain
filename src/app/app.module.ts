@@ -19,9 +19,10 @@ import {ToolbarModule} from "primeng/toolbar";
 import {PanelModule} from "primeng/panel";
 import {TableModule} from "primeng/table";
 import {CheckboxModule} from "primeng/checkbox";
-import {ChipModule} from "primeng/chip";
+//import {ChipModule} from "primeng/chip";
 import {TooltipModule} from "primeng/tooltip";
 import {ChartModule} from "primeng/chart";
+import {ToastModule} from "primeng/toast";
 
 
 @NgModule({
@@ -46,9 +47,10 @@ import {ChartModule} from "primeng/chart";
         PanelModule,
         TableModule,
         CheckboxModule,
-        ChipModule,
+        //ChipModule,
         TooltipModule,
-        ChartModule
+        ChartModule,
+        ToastModule
     ],
   providers: [],
   bootstrap: [AppComponent]

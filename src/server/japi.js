@@ -38,6 +38,7 @@ class JAPI {
 
     async _parseGame ($) {
         const title = $('#game_title h1').text();
+        console.log('title', title);
         const airdate = dateformat(new Date(title.split(/\s*-\s*/)[1]), 'yyyy-mm-dd');
         const coryats = this ._parseCoryats($);
         const round_query = $('.round');

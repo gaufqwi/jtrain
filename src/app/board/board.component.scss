@@ -1,7 +1,7 @@
 .final {
   background-color: white;
   width: 100%;
-  height: calc(100vh - 76px);
+  height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -43,6 +43,7 @@
   .category {
     font-size: 4vh;
     font-weight: bold;
+    text-align: center;
     color: #aaaaaa;
   }
 
